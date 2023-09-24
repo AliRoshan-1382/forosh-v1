@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 24, 2023 at 08:47 PM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+-- Generation Time: Sep 24, 2023 at 09:52 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,9 +29,9 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `admin` (
   `id` int(11) NOT NULL,
-  `admin-name` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
-  `admin-username` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
-  `admin-password` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL
+  `admin-name` varchar(150) NOT NULL,
+  `admin-username` varchar(150) NOT NULL,
+  `admin-password` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 --
@@ -49,7 +49,7 @@ INSERT INTO `admin` (`id`, `admin-name`, `admin-username`, `admin-password`) VAL
 
 CREATE TABLE `category` (
   `id` int(11) NOT NULL,
-  `category_name` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL
+  `category_name` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 --
@@ -68,9 +68,9 @@ INSERT INTO `category` (`id`, `category_name`) VALUES
 
 CREATE TABLE `customer` (
   `id` int(11) NOT NULL,
-  `customer_name` varchar(100) COLLATE utf8mb4_persian_ci NOT NULL,
-  `customer_username` varchar(100) COLLATE utf8mb4_persian_ci NOT NULL,
-  `customer_password` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL
+  `customer_name` varchar(100) NOT NULL,
+  `customer_username` varchar(100) NOT NULL,
+  `customer_password` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 --
@@ -86,40 +86,18 @@ INSERT INTO `customer` (`id`, `customer_name`, `customer_username`, `customer_pa
 -- --------------------------------------------------------
 
 --
--- Table structure for table `factor`
---
-
-CREATE TABLE `factor` (
-  `id` int(11) NOT NULL,
-  `customer_name` varchar(255) COLLATE utf8mb4_persian_ci NOT NULL,
-  `customer_id` int(250) NOT NULL,
-  `report_id` int(250) NOT NULL,
-  `NumPurchases` int(255) NOT NULL,
-  `Total_price` int(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `product`
 --
 
 CREATE TABLE `product` (
   `id` int(11) NOT NULL,
-  `product_name` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL,
+  `product_name` varchar(250) NOT NULL,
   `product_inventory` int(255) NOT NULL,
   `product_price` int(255) NOT NULL,
-  `product_category` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL,
+  `product_category` varchar(250) NOT NULL,
   `sales` int(255) NOT NULL,
   `remaining` int(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
-
---
--- Dumping data for table `product`
---
-
-INSERT INTO `product` (`id`, `product_name`, `product_inventory`, `product_price`, `product_category`, `sales`, `remaining`) VALUES
-(3, 'hghgdhdgh', 5, 5, 'kjhgk', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -129,14 +107,15 @@ INSERT INTO `product` (`id`, `product_name`, `product_inventory`, `product_price
 
 CREATE TABLE `reports` (
   `id` int(11) NOT NULL,
-  `customer_name` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL,
+  `customer_name` varchar(250) NOT NULL,
   `customer_id` int(255) NOT NULL,
   `product_id` int(255) NOT NULL,
-  `product_name` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL,
-  `date` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL,
-  `time` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL,
-  `status` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL DEFAULT 'pending',
-  `price` int(255) NOT NULL
+  `product_name` varchar(250) NOT NULL,
+  `date` varchar(250) NOT NULL,
+  `time` varchar(250) NOT NULL,
+  `status` varchar(250) NOT NULL DEFAULT 'pending',
+  `price` int(255) NOT NULL,
+  `num_product` int(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 --
@@ -160,26 +139,27 @@ ALTER TABLE `category`
 -- Indexes for table `customer`
 --
 ALTER TABLE `customer`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `factor`
---
-ALTER TABLE `factor`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `customer_name` (`customer_name`),
+  ADD KEY `id` (`id`);
 
 --
 -- Indexes for table `product`
 --
 ALTER TABLE `product`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `category` (`product_category`);
+  ADD KEY `category` (`product_category`),
+  ADD KEY `product_name` (`product_name`);
 
 --
 -- Indexes for table `reports`
 --
 ALTER TABLE `reports`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `customer_id` (`customer_id`),
+  ADD KEY `customer_name` (`customer_name`),
+  ADD KEY `product_id` (`product_id`),
+  ADD KEY `product_name` (`product_name`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -204,22 +184,16 @@ ALTER TABLE `customer`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `factor`
---
-ALTER TABLE `factor`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `reports`
 --
 ALTER TABLE `reports`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
@@ -230,6 +204,15 @@ ALTER TABLE `reports`
 --
 ALTER TABLE `product`
   ADD CONSTRAINT `category` FOREIGN KEY (`product_category`) REFERENCES `category` (`category_name`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `reports`
+--
+ALTER TABLE `reports`
+  ADD CONSTRAINT `cid` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `cname` FOREIGN KEY (`customer_name`) REFERENCES `customer` (`customer_name`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `pid` FOREIGN KEY (`customer_id`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `pname` FOREIGN KEY (`product_name`) REFERENCES `product` (`product_name`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

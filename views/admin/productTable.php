@@ -265,7 +265,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="index.html">
+        <a class="nav-link collapsed" href="<?= site_url('') ?>">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
@@ -468,7 +468,7 @@
                             <td><?= $product['product_price'] ?></td>
                             <td><?= $product['product_category'] ?></td>
                             <td>
-                              <a href="<?= site_url("") ?>" class="btn btn-danger">Delete</a>
+                              <a href="<?= site_url("admin/ProductDelete/".$product['id']) ?>" class="btn btn-danger">Delete</a>
                               <a href="<?= site_url("") ?>" class="btn btn-info">Edit</a>
                             </td>
                         </tr>

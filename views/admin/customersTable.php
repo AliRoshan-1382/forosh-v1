@@ -265,7 +265,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="index.html">
+        <a class="nav-link collapsed" href="<?= site_url('') ?>">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
@@ -441,7 +441,7 @@
 
     <section class="section">
       <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-8">
           <div class="card">
           <div class="card">
             <div class="card-body">
@@ -452,21 +452,17 @@
                 <thead>
                   <tr>
                     <th scope="col">id</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Inventory</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Category</th>
+                    <th scope="col">customer name</th>
+                    <th scope="col">customer username</th>
                     <th scope="col"></th>
                   </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($products as $product): ?>
+                    <?php foreach ($customer as $customer): ?>
                         <tr>
-                            <td><?= $product['id'] ?></td>
-                            <td><?= $product['product_name'] ?></td>
-                            <td><?= $product['product_inventory'] ?></td>
-                            <td><?= $product['product_price'] ?></td>
-                            <td><?= $product['product_category'] ?></td>
+                            <td><?= $customer['id'] ?></td>
+                            <td><?= $customer['customer_name'] ?></td>
+                            <td><?= $customer['customer_username'] ?></td>
                             <td>
                               <a href="<?= site_url("") ?>" class="btn btn-danger">Delete</a>
                               <a href="<?= site_url("") ?>" class="btn btn-info">Edit</a>

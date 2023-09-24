@@ -265,7 +265,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="index.html">
+        <a class="nav-link collapsed" href="<?= site_url('') ?>">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
@@ -453,20 +453,14 @@
                   <tr>
                     <th scope="col">id</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Inventory</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Category</th>
                     <th scope="col"></th>
                   </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($products as $product): ?>
+                    <?php foreach ($category as $category): ?>
                         <tr>
-                            <td><?= $product['id'] ?></td>
-                            <td><?= $product['product_name'] ?></td>
-                            <td><?= $product['product_inventory'] ?></td>
-                            <td><?= $product['product_price'] ?></td>
-                            <td><?= $product['product_category'] ?></td>
+                            <td><?= $category['id'] ?></td>
+                            <td><?= $category['category_name'] ?></td>
                             <td>
                               <a href="<?= site_url("") ?>" class="btn btn-danger">Delete</a>
                               <a href="<?= site_url("") ?>" class="btn btn-info">Edit</a>

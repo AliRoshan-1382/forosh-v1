@@ -6,7 +6,8 @@ use App\Models\admin;
 use App\Models\customer;
 use App\Models\category;
 use App\Models\product;
-
+use App\Models\report;
+use App\Models\factor;
 
 
 session_start();
@@ -15,11 +16,15 @@ class adminController{
     private $customerModel;
     private $categoryModel;
     private $productModel;
+    private $reportModel;
+    private $factorModel;
     public function __construct(){
         $this->adminModel = new admin();
         $this->customerModel = new customer();
         $this->categoryModel = new category();
         $this->productModel = new product();
+        $this->reportModel = new report();
+        $this->factorModel = new factor();
     }
 
     public function dashboard()
@@ -28,7 +33,8 @@ class adminController{
         {
             $data = $this->adminModel->get(["id", "admin-name", "admin-password", "admin-username"], ["admin-username" => $_SESSION['admin']]);
             $customer_count = $this->customerModel->count([]);
-            $sum_price = $this->productModel->sum('product_price', []);
+            // $sum_price = $this->factorModel->sum('Total_price', []);
+            $sum_price = 100;
             // $data = $this->adminModel->get(["id", "admin-name", "admin-password", "admin-username"], ["admin-username" => $_SESSION['admin']]);
 
             $out['admin'] = $data[0];
@@ -178,7 +184,7 @@ class adminController{
 
             $data['status'] = true;
             $data['Data'] = 'Product Added successfully...';
-            $data['url'] = '';
+            $data['url'] = 'admin/productsTable';
             $count = $this->productModel->create($userInfo);
             view('errors.erorr-success', $data);
         }
@@ -194,28 +200,47 @@ class adminController{
 
     public function customersTable(){
         $data = $this->adminModel->get(["id", "admin-name", "admin-password", "admin-username"], ["admin-username" => $_SESSION['admin']]);
-        $products = $this->productModel->getAll();
+        $customer = $this->customerModel->getAll();
         $out['admin'] = $data[0];
-        $out['products'] = $products;
+        $out['customer'] = $customer;
         view('admin.customersTable', $out);
     }
 
     
     public function reportsTable(){
         $data = $this->adminModel->get(["id", "admin-name", "admin-password", "admin-username"], ["admin-username" => $_SESSION['admin']]);
-        $products = $this->productModel->getAll();
+        $report = $this->reportModel->getAll();
         $out['admin'] = $data[0];
-        $out['products'] = $products;
+        $out['report'] = $report;
         view('admin.reportsTable', $out);
     }
 
     
     public function categoriesTable(){
         $data = $this->adminModel->get(["id", "admin-name", "admin-password", "admin-username"], ["admin-username" => $_SESSION['admin']]);
-        $products = $this->productModel->getAll();
+        $category = $this->categoryModel->getAll();
         $out['admin'] = $data[0];
-        $out['products'] = $products;
+        $out['category'] = $category;
         view('admin.categoriesTable', $out);
+    }
+
+    public function ProductDelete(){
+        global $request;
+        $id = $request->get_route_param('id');
+        $count = $this->productModel->get('*',["id"=>$id]);
+
+        if (count($count) == 1) {
+            $this->productModel->delete(["id"=>$id]);
+            $data['status'] = true;
+            $data['Data'] = "Product Deleted Successfully";
+            $data['url'] = "admin/productsTable";
+        }
+        elseif(count($count) != 1) {
+            $data['status'] = false;
+            $data['Data'] = "Product Dont Deleted Successfully";
+            $data['url'] = "admin/productsTable";
+        }
+        view('errors.erorr-success', $data);
     }
 
 

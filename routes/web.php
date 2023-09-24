@@ -14,8 +14,10 @@ Route::get($_ENV['SampleRoute'] . '/admin/productsTable', 'adminController@produ
 Route::get($_ENV['SampleRoute'] . '/admin/customersTable', 'adminController@customersTable'); // جدول مشتریان
 Route::get($_ENV['SampleRoute'] . '/admin/reportsTable', 'adminController@reportsTable'); // جدول گزارشات
 Route::get($_ENV['SampleRoute'] . '/admin/categoriesTable', 'adminController@categoriesTable'); // جدول دسته بندی ها
+Route::get($_ENV['SampleRoute'] . '/admin/ProductDelete/{id}', 'adminController@ProductDelete'); // جدول دسته بندی ها
 
  
+
 
 
 

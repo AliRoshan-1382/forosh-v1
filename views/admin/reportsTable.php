@@ -265,7 +265,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="index.html">
+        <a class="nav-link collapsed" href="<?= site_url('') ?>">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
@@ -452,24 +452,34 @@
                 <thead>
                   <tr>
                     <th scope="col">id</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Inventory</th>
+                    <th scope="col">customer name</th>
+                    <th scope="col">customer id</th>
+                    <th scope="col">product id</th>
+                    <th scope="col">product name</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Status</th>
                     <th scope="col">Price</th>
-                    <th scope="col">Category</th>
+                    <th scope="col">Num Product</th>
                     <th scope="col"></th>
                   </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($products as $product): ?>
+                    <?php foreach ($report as $report): ?>
                         <tr>
                             <td><?= $product['id'] ?></td>
+                            <td><?= $product['customer_name'] ?></td>
+                            <td><?= $product['customer_id'] ?></td>
+                            <td><?= $product['product_id'] ?></td>
                             <td><?= $product['product_name'] ?></td>
-                            <td><?= $product['product_inventory'] ?></td>
-                            <td><?= $product['product_price'] ?></td>
-                            <td><?= $product['product_category'] ?></td>
+                            <td><?= $product['date'] ?></td>
+                            <td><?= $product['time'] ?></td>
+                            <td><?= $product['status'] ?></td>
+                            <td><?= $product['price'] ?></td>
+                            <td><?= $product['num_product'] ?></td>
                             <td>
-                              <a href="<?= site_url("") ?>" class="btn btn-danger">Delete</a>
-                              <a href="<?= site_url("") ?>" class="btn btn-info">Edit</a>
+                              <a href="<?= site_url("") ?>" class="btn btn-danger">Cancel</a>
+                              <a href="<?= site_url("") ?>" class="btn btn-info">Accept</a>
                             </td>
                         </tr>
                     <?php endforeach ?>

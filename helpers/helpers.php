@@ -8,6 +8,12 @@ function site_url($route = '')
     return $x;
 }
 
+function Redirect($url, $permanent = false){
+    header('Location: ' . $url, true, $permanent ? 301 : 302);
+
+    exit();
+}
+
 function asset_url($route = '')
 {
     return site_url("assets/" . $route);

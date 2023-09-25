@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Forms / Elements - NiceAdmin Bootstrap Template</title>
+  <title>Dashboard - NiceAdmin Bootstrap Template</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -21,8 +21,8 @@
   <link href="<?= asset_url('vendor/bootstrap/css/bootstrap.min.css') ?>" rel="stylesheet">
   <link href="<?= asset_url('vendor/bootstrap-icons/bootstrap-icons.css') ?>" rel="stylesheet">
   <link href="<?= asset_url('vendor/boxicons/css/boxicons.min.css') ?>" rel="stylesheet">
-  <link href="<?= asset_url('vendor/quill/quill.snow.cs') ?>s" rel="stylesheet">
-  <link href="<?= asset_url('vendor/quill/quill.bubble.cs') ?>s" rel="stylesheet">
+  <link href="<?= asset_url('vendor/quill/quill.snow.css') ?>" rel="stylesheet">
+  <link href="<?= asset_url('vendor/quill/quill.bubble.css') ?>" rel="stylesheet">
   <link href="<?= asset_url('vendor/remixicon/remixicon.css') ?>" rel="stylesheet">
   <link href="<?= asset_url('vendor/simple-datatables/style.css') ?>" rel="stylesheet">
 
@@ -40,38 +40,44 @@
 
 <body>
 
- <header id="header" class="header fixed-top d-flex align-items-center">
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a href="<?= site_url('') ?>" class="logo d-flex align-items-center">
+      <a href="<?= site_url('customer') ?>" class="logo d-flex align-items-center">
         <img src="<?= asset_url('img/logo.png') ?>" alt="">
-        <span class="d-none d-lg-block">Admin</span>
+        <span class="d-none d-lg-block">Customer</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
 
-
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
+
+        <li class="nav-item d-block d-lg-none">
+          <a class="nav-link nav-icon search-bar-toggle " href="<?= site_url('customer') ?>">
+            <i class="bi bi-search"></i>
+          </a>
+        </li><!-- End Search Icon-->
 
         <li class="nav-item dropdown pe-3">
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <img src="<?= asset_url('img/profile-img.jpg') ?>" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2"><?= $admin['admin-name'] ?></span>
+            <span class="d-none d-md-block dropdown-toggle ps-2"><?= $customer['customer_name'] ?></span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6><?= $admin['admin-name'] ?></h6>
-              <span>Web Designer</span>
+              <h6><?= $customer['customer_name'] ?></h6>
+              <span>Customer</span>
             </li>
             <li>
               <hr class="dropdown-divider">
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="<?= site_url('admin/logout') ?>">
+              <a class="dropdown-item d-flex align-items-center" href="<?= site_url('customer/logout') ?>">
                 <i class="bi bi-box-arrow-right"></i>
                 <span>logout</span>
               </a>
@@ -83,13 +89,14 @@
     </nav><!-- End Icons Navigation -->
 
   </header><!-- End Header -->
+
   <!-- ======= Sidebar ======= -->
   <aside id="sidebar" class="sidebar">
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="<?= site_url('') ?>">
+        <a class="nav-link collapsed" href="<?= site_url('customer') ?>">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
@@ -101,22 +108,13 @@
         </a>
         <ul id="forms-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
           <li>
-            <a href="<?= site_url('admin/customerForm') ?>">
-              <i class="bi bi-circle"></i><span>Customer registration form</span>
-            </a>
-          </li>
-          <li>
-            <a href="<?= site_url('admin/categoryForm')?>">
-              <i class="bi bi-circle"></i><span>Category registration form</span>
-            </a>
-          </li>
-          <li>
-            <a href="<?= site_url('admin/productForm')?>" class="active">
-              <i class="bi bi-circle"></i><span>Product registration form</span>
+            <a href="<?= site_url('customer/OrderForm') ?>" class="active">
+              <i class="bi bi-circle"></i><span>Order</span>
             </a>
           </li>
         </ul>
-      </li><!-- End Forms Nav -->
+      </li>
+
 
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
@@ -124,23 +122,13 @@
         </a>
         <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="<?= site_url('admin/productsTable') ?>">
+            <a href="<?= site_url('customer/productsTable') ?>">
               <i class="bi bi-circle"></i><span>Products Tables</span>
             </a>
           </li>
           <li>
-            <a href="<?= site_url('admin/categoriesTable') ?>">
-              <i class="bi bi-circle"></i><span>Categories Tables</span>
-            </a>
-          </li>
-          <li>
-            <a href="<?= site_url('admin/reportsTable') ?>">
+            <a href="<?= site_url('customer/reportsTable') ?>">
               <i class="bi bi-circle"></i><span>Reports Tables</span>
-            </a>
-          </li>
-          <li>
-            <a href="<?= site_url('admin/customersTable') ?>">
-              <i class="bi bi-circle"></i><span>Customers Tables</span>
             </a>
           </li>
         </ul>
@@ -152,73 +140,51 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Product Form</h1>
+      <h1>Order</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><p>Home</p></li>
           <li class="breadcrumb-item">Forms</li>
-          <li class="breadcrumb-item active">Product</li>
+          <li class="breadcrumb-item active">Products</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
     <section class="section">
-      <div class="row">
-        <div class="col-lg-12">
+      <div class="row align-items-top">
+        <?php foreach ($products as $product):?>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                    <h4 class="card-title">Product name : <?= $product['product_name'] ?></h5>
+                    <h5 class="card-subtitle mb-2 text-muted">Category : <?= $product['product_category'] ?></h6>
+                    <h5 class="card-subtitle mb-2 text-muted">Remaining : <?= $product['remaining'] ?></h6>
+                    <h5 class="card-subtitle mb-2 text-muted">Price : <?= $product['product_price'] ?></h6>
+                    <form action="<?= site_url('customer/addOrder') ?>" method="post">
+                        <div class="form-floating mb-3 mt-3">
+                            <input type="text" name="id" class="form-control" value="<?= $product['id'] ?>" readonly>
+                            <label class="col-sm-2 col-form-label">Product id</label>
+                        </div>
 
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Product Form</h5>
-
-              <!-- General Form Elements -->
-              <form action="<?= site_url('admin/addproduct') ?>" method="post">
-                <div class="row mb-3">
-                  <label for="inputText" class="col-sm-2 col-form-label">Product Name</label>
-                  <div class="col-sm-10">
-                    <input type="text" name="pname" id="pname" class="form-control" required>
-                  </div>
+                        <div class="form-floating mb-3 mt-3">
+                            <input type="number" min="1" max="<?= $product['remaining'] ?>" class="form-control" id="inventory"  name="inventory">
+                            <label for="inventory">Inventory</label>
+                        </div>
+                    
+                        <div class="row mb-3">
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
                 </div>
-                <div class="row mb-3">
-                  <label for="inputEmail" class="col-sm-2 col-form-label">Product Inventory</label>
-                  <div class="col-sm-10">
-                    <input type="number" name="pinventory" id="pinventory" class="form-control" required>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="inputPassword" class="col-sm-2 col-form-label">Product Price</label>
-                  <div class="col-sm-10">
-                    <input type="number" name="pprice" id="pprice" class="form-control" required>
-                  </div>
-                </div>
-
-                <div class="row mb-3">
-                  <label class="col-sm-2 col-form-label">Product category</label>
-                  <div class="col-sm-10">
-                    <select class="form-select" name="pcategory" aria-label="Default select example" required>
-                    <?php foreach ($category as $key): ?>
-                        <option value="<?= $key['category_name'] ?>"><?= $key['category_name'] ?></option>
-                    <?php endforeach ?>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="row mb-3">
-                  <div class="col-sm-10">
-                    <button type="submit" class="btn btn-primary">Submit Form</button>
-                  </div>
-                </div>
-              </form><!-- End General Form Elements -->
-
             </div>
-          </div>
-
-        </div>
-
+        <?php endforeach ?>
       </div>
     </section>
 
   </main><!-- End #main -->
-
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
@@ -226,7 +192,7 @@
   <script src="<?= asset_url('vendor/apexcharts/apexcharts.min.js') ?>"></script>
   <script src="<?= asset_url('vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
   <script src="<?= asset_url('vendor/chart.js/chart.umd.js') ?>"></script>
-  <script src="<?= asset_url('vendor/echarts/echarts.min.j') ?>s"></script>
+  <script src="<?= asset_url('vendor/echarts/echarts.min.js') ?>"></script>
   <script src="<?= asset_url('vendor/quill/quill.min.js') ?>"></script>
   <script src="<?= asset_url('vendor/simple-datatables/simple-datatables.js') ?>"></script>
   <script src="<?= asset_url('vendor/tinymce/tinymce.min.js') ?>"></script>

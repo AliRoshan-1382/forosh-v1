@@ -21,6 +21,21 @@ Route::get($_ENV['SampleRoute'] . '/admin/ProductDelete/{id}', 'adminController@
 Route::get($_ENV['SampleRoute'].'/customer','customerController@dashboard'); //صفحه داشبورد
 Route::post($_ENV['SampleRoute'] . '/customer/login', 'customerController@login'); //صفحه لاگین
 Route::get($_ENV['SampleRoute'] . '/customer/logout', 'customerController@logout'); //صفحه خروج
+Route::get($_ENV['SampleRoute'] . '/customer/OrderForm', 'customerController@OrderForm'); //صفحه سفارش
+Route::post($_ENV['SampleRoute'] . '/customer/addOrder', 'customerController@addOrder'); // ثبت سفارش
+Route::get($_ENV['SampleRoute'] . '/customer/productsTable', 'customerController@productsTable'); // لیست محصولات 
+Route::get($_ENV['SampleRoute'] . '/customer/reportsTable', 'customerController@reportsTable'); // لیست گزارشات 
+Route::get($_ENV['SampleRoute'] . '/customer/reportDelete/{id}', 'customerController@reportDelete'); // حذف گزارشات 
+
+
+
+
+
+
+
+
+
+Route::post($_ENV['SampleRoute'] . '/cus', 'customerController@aaaa'); // حذف گزارشات 
 
 
 

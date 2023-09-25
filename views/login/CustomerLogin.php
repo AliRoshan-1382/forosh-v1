@@ -60,7 +60,7 @@
                 <div class="card-body">
 
                   <div class="pt-4 pb-2">
-                    <h6 class="card-title text-center pb-0 fs-4">Are You a Customer?<a href="<?= site_url('') ?>">Click Here</a></h6>
+                    <h6 class="card-title text-center pb-0 fs-4">Are You a Admin?<a href="<?= site_url('') ?>">Click Here</a></h6>
                     <p class="text-center small">Enter your username & password to login</p>
                   </div>
 

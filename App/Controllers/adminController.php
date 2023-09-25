@@ -179,6 +179,7 @@ class adminController{
                 "product_inventory" => $request->input('pinventory'),
                 "product_price" => $request->input('pprice'),
                 "product_category" => $request->input('pcategory'),
+                "remaining" => $request->input('pinventory'),
             ];
 
             $data['status'] = true;

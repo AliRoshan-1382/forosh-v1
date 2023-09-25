@@ -96,7 +96,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="<?= site_url('customer') ?>">
+        <a class="nav-link collapsed" href="<?= site_url('customer') ?>">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
@@ -116,12 +116,12 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+        <a class="nav-link " data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-layout-text-window-reverse"></i><span>Tables</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
-        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+        <ul id="tables-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
           <li>
-            <a href="<?= site_url('customer/productsTable') ?>">
+            <a href="<?= site_url('customer/productsTable') ?>" class="active">
               <i class="bi bi-circle"></i><span>Products Tables</span>
             </a>
           </li>
@@ -143,6 +143,7 @@
         <nav>
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><p>Home</p></li>
+            <li class="breadcrumb-item">Tables</li>
             <li class="breadcrumb-item active">Products</li>
           </ol>
         </nav>
@@ -156,7 +157,6 @@
               <div class="card-body">
                 <h5 class="card-title">Products Table</h5>
 
-                <!-- Table with hoverable rows -->
                 <table class="table table-hover">
                   <thead>
                     <tr>
@@ -177,8 +177,6 @@
                       <?php endforeach ?>
                   </tbody>
                 </table>
-                <!-- End Table with hoverable rows -->
-
               </div>
             </div>
           </div>

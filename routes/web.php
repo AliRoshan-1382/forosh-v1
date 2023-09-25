@@ -18,7 +18,9 @@ Route::get($_ENV['SampleRoute'] . '/admin/ProductDelete/{id}', 'adminController@
 
  
 
-
+Route::get($_ENV['SampleRoute'].'/customer','customerController@dashboard'); //صفحه داشبورد
+Route::post($_ENV['SampleRoute'] . '/customer/login', 'customerController@login'); //صفحه لاگین
+Route::get($_ENV['SampleRoute'] . '/customer/logout', 'customerController@logout'); //صفحه خروج
 
 
 

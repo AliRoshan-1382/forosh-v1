@@ -81,7 +81,6 @@ class adminController{
 
     public function logout(){
         if (isset($_SESSION['admin'])) {
-            echo 11111;
             session_unset();
             Redirect(site_url(''), false);
         }

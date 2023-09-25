@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 24, 2023 at 09:52 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: Sep 25, 2023 at 05:49 PM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,9 +29,9 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `admin` (
   `id` int(11) NOT NULL,
-  `admin-name` varchar(150) NOT NULL,
-  `admin-username` varchar(150) NOT NULL,
-  `admin-password` varchar(250) NOT NULL
+  `admin-name` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
+  `admin-username` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
+  `admin-password` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id`, `admin-name`, `admin-username`, `admin-password`) VALUES
-(1, 'علی ابراهیم نیا روشن', 'admin', '$2y$10$z4XpTqAFKvekCcSzFZrRXeR.FzO5emrzuOb8M89nKOTc3Slgg4ImC');
+(1, 'Ali Dragon', 'admin', '$2y$10$z4XpTqAFKvekCcSzFZrRXeR.FzO5emrzuOb8M89nKOTc3Slgg4ImC');
 
 -- --------------------------------------------------------
 
@@ -49,7 +49,7 @@ INSERT INTO `admin` (`id`, `admin-name`, `admin-username`, `admin-password`) VAL
 
 CREATE TABLE `category` (
   `id` int(11) NOT NULL,
-  `category_name` varchar(250) NOT NULL
+  `category_name` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 --
@@ -68,20 +68,23 @@ INSERT INTO `category` (`id`, `category_name`) VALUES
 
 CREATE TABLE `customer` (
   `id` int(11) NOT NULL,
-  `customer_name` varchar(100) NOT NULL,
-  `customer_username` varchar(100) NOT NULL,
-  `customer_password` varchar(250) NOT NULL
+  `customer_name` varchar(100) COLLATE utf8mb4_persian_ci NOT NULL,
+  `customer_username` varchar(100) COLLATE utf8mb4_persian_ci NOT NULL,
+  `customer_password` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL,
+  `access_login` varchar(20) COLLATE utf8mb4_persian_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 --
 -- Dumping data for table `customer`
 --
 
-INSERT INTO `customer` (`id`, `customer_name`, `customer_username`, `customer_password`) VALUES
-(1, 'hdtgh', 'hdghdgh', '$2y$10$WVSSA8JL6CpasMtb3sLzS.R8LWyIJZVBqEu2ICgb7Yt5HAOgYQKzi'),
-(2, 'fdfvd', 'hdtgh', '$2y$10$cRCjI7K9MjBoZuK9XO2yc.TxwTgkm4PKXxwtV7TcVQKwbdEo.s40K'),
-(3, 'hfjfj', 'hjhfjf', '$2y$10$Wmrl7Je5IY9u9.jC2JlI0eNTZb1153usimwEfKVmdAOxH/huX4Tqm'),
-(4, 'jhjhj', 'jhjhjh', '$2y$10$zneVjFom8i0aITJ0Sy2yZufw2b2dTOS4vFXhEINL7SwHE7SA4LN4a');
+INSERT INTO `customer` (`id`, `customer_name`, `customer_username`, `customer_password`, `access_login`) VALUES
+(1, 'hdtgh', 'hdghdgh', '$2y$10$WVSSA8JL6CpasMtb3sLzS.R8LWyIJZVBqEu2ICgb7Yt5HAOgYQKzi', 'ok'),
+(2, 'fdfvd', 'hdtgh', '$2y$10$cRCjI7K9MjBoZuK9XO2yc.TxwTgkm4PKXxwtV7TcVQKwbdEo.s40K', 'ok'),
+(3, 'hfjfj', 'hjhfjf', '$2y$10$Wmrl7Je5IY9u9.jC2JlI0eNTZb1153usimwEfKVmdAOxH/huX4Tqm', 'ok'),
+(4, 'jhjhj', 'jhjhjh', '$2y$10$zneVjFom8i0aITJ0Sy2yZufw2b2dTOS4vFXhEINL7SwHE7SA4LN4a', 'ok'),
+(5, 'ali', 'ali', '$2y$10$Ul6b76PAmADPwQ00tFwCPuz3./D5JuDBVt6QwCvWLRhDUSzWnYupq', 'ok'),
+(6, 'hthhtht', 'hthth', '$2y$10$sSVKU9XDGC6.S8xoX4Dtx.hMjj0skaymPaBpNvmuqLvotDamffM8O', '');
 
 -- --------------------------------------------------------
 
@@ -91,10 +94,10 @@ INSERT INTO `customer` (`id`, `customer_name`, `customer_username`, `customer_pa
 
 CREATE TABLE `product` (
   `id` int(11) NOT NULL,
-  `product_name` varchar(250) NOT NULL,
+  `product_name` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL,
   `product_inventory` int(255) NOT NULL,
   `product_price` int(255) NOT NULL,
-  `product_category` varchar(250) NOT NULL,
+  `product_category` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL,
   `sales` int(255) NOT NULL,
   `remaining` int(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
@@ -107,13 +110,13 @@ CREATE TABLE `product` (
 
 CREATE TABLE `reports` (
   `id` int(11) NOT NULL,
-  `customer_name` varchar(250) NOT NULL,
+  `customer_name` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL,
   `customer_id` int(255) NOT NULL,
   `product_id` int(255) NOT NULL,
-  `product_name` varchar(250) NOT NULL,
-  `date` varchar(250) NOT NULL,
-  `time` varchar(250) NOT NULL,
-  `status` varchar(250) NOT NULL DEFAULT 'pending',
+  `product_name` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL,
+  `date` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL,
+  `time` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL,
+  `status` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL DEFAULT 'pending',
   `price` int(255) NOT NULL,
   `num_product` int(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
@@ -181,7 +184,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `product`

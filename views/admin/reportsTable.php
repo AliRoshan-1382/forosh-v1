@@ -157,7 +157,7 @@
       <h1>Reports Tables</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><p>Home</p></li>
           <li class="breadcrumb-item">Tables</li>
           <li class="breadcrumb-item active">Reports</li>
         </ol>
@@ -181,7 +181,6 @@
                     <th scope="col">customer id</th>
                     <th scope="col">product id</th>
                     <th scope="col">product name</th>
-                    <th scope="col">Date</th>
                     <th scope="col">Time</th>
                     <th scope="col">Status</th>
                     <th scope="col">Price</th>
@@ -191,22 +190,53 @@
                 </thead>
                 <tbody>
                     <?php foreach ($report as $report): ?>
+                      <?php if ($report['status'] == 'pending'):?>
                         <tr>
-                            <td><?= $product['id'] ?></td>
-                            <td><?= $product['customer_name'] ?></td>
-                            <td><?= $product['customer_id'] ?></td>
-                            <td><?= $product['product_id'] ?></td>
-                            <td><?= $product['product_name'] ?></td>
-                            <td><?= $product['date'] ?></td>
-                            <td><?= $product['time'] ?></td>
-                            <td><?= $product['status'] ?></td>
-                            <td><?= $product['price'] ?></td>
-                            <td><?= $product['num_product'] ?></td>
+                            <td><?= $report['id'] ?></td>
+                            <td><?= $report['customer_name'] ?></td>
+                            <td><?= $report['customer_id'] ?></td>
+                            <td><?= $report['product_id'] ?></td>
+                            <td><?= $report['product_name'] ?></td>
+                            <td><?= $report['time'] ?></td>
+                            <td><?= $report['status'] ?></td>
+                            <td><?= $report['price'] ?></td>
+                            <td><?= $report['num_product'] ?></td>
                             <td>
-                              <a href="<?= site_url("") ?>" class="btn btn-danger">Cancel</a>
-                              <a href="<?= site_url("") ?>" class="btn btn-info">Accept</a>
+                              <a href="<?= site_url('admin/cancelOrder/'.$report['id']) ?>" class="btn btn-danger">Cancel</a>
+                              <a href="<?= site_url("admin/acceptOrder/".$report['id']) ?>" class="btn btn-info">Accept</a>
                             </td>
                         </tr>
+                      <?php elseif($report['status'] == 'accept'): ?>
+                        <tr>
+                            <td><?= $report['id'] ?></td>
+                            <td><?= $report['customer_name'] ?></td>
+                            <td><?= $report['customer_id'] ?></td>
+                            <td><?= $report['product_id'] ?></td>
+                            <td><?= $report['product_name'] ?></td>
+                            <td><?= $report['time'] ?></td>
+                            <td><?= $report['status'] ?></td>
+                            <td><?= $report['price'] ?></td>
+                            <td><?= $report['num_product'] ?></td>
+                            <td>
+                              <a class="btn btn-success">Accepted</a>
+                            </td>
+                        </tr>
+                      <?php elseif($report['status'] == 'failed'): ?>
+                        <tr>
+                            <td><?= $report['id'] ?></td>
+                            <td><?= $report['customer_name'] ?></td>
+                            <td><?= $report['customer_id'] ?></td>
+                            <td><?= $report['product_id'] ?></td>
+                            <td><?= $report['product_name'] ?></td>
+                            <td><?= $report['time'] ?></td>
+                            <td><?= $report['status'] ?></td>
+                            <td><?= $report['price'] ?></td>
+                            <td><?= $report['num_product'] ?></td>
+                            <td>
+                              <a class="btn btn-warning">Failed</a>
+                            </td>
+                        </tr>
+                      <?php endif ?>
                     <?php endforeach ?>
                 </tbody>
               </table>

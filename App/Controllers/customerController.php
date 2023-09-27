@@ -26,19 +26,28 @@ class customerController
         $this->reportModel = new report();
     }
 
+    public function session(){
+        if (isset($_SESSION['customer']) || isset($_SESSION['customer_id'])) 
+        {
+            $data = $this->customerModel->get(["id", "customer_name", "customer_password", "customer_username"], ["id" => $_SESSION['customer_id']])[0];
+
+            if ($data['customer_username'] != $_SESSION['customer']) {
+                session_unset();
+                Redirect(site_url('customer'), false);
+            }
+        }
+    }
+
     public function dashboard()
     {
-        if (isset($_SESSION['customer'])) {
+        $this->session();
+        if (!empty($_SESSION['customer'])) {
             $data = $this->customerModel->get(["id", "customer_name", "customer_password", "customer_username"], ["customer_username" => $_SESSION['customer']]);
-            // $customer_count = $this->customerModel->count([]);
-            // $sum_price = $this->factorModel->sum('Total_price', []);
-            // $sum_price = 100;
+
             $product = $this->productModel->get(["id", "product_name", "product_inventory", "product_price", "product_category", "remaining"], ["remaining[>]" => 1]);
 
             $out['customer'] = $data[0];
             $out['products'] = $product;
-            // $out['customer'] = $customer_count;
-            // $out['sum_price'] = $sum_price;
 
             view('customer.CustomerDashboard', $out);
         } else {
@@ -56,6 +65,7 @@ class customerController
             if ($customerRow['access_login'] == 'ok') {
                 if (password_verify($request->input('password'), $customerRow['customer_password'])) {
                     $_SESSION['customer'] = $request->input('username');
+                    $_SESSION['customer_id'] = $customerRow['id'];
                     Redirect(site_url('customer'), false);
                 } else {
                     $data['status'] = false;
@@ -87,8 +97,14 @@ class customerController
         }
     }
 
+    public function customerDetails(){
+        return $this->customerModel->get(["id", "customer_name", "customer_password", "customer_username"], ["customer_username" => $_SESSION['customer']]);
+    }
+
     public function OrderForm(){
-        $data = $this->customerModel->get(["id", "customer_name", "customer_password", "customer_username"], ["customer_username" => $_SESSION['customer']]);
+        $this->session();
+
+        $data = $this->customerDetails();
         $product = $this->productModel->get(["id", "product_name", "product_inventory", "product_price", "product_category", "remaining"], ["remaining[>]" => 1]);
         $out['customer'] = $data[0];
         $out['products'] = $product;
@@ -96,8 +112,10 @@ class customerController
     }
 
     public function addOrder(){
+        $this->session();
+
         global $request;
-        $customer = $this->customerModel->get(["id", "customer_name"], ["customer_username" => $_SESSION['customer']])[0];
+        $customer = $this->customerDetails()[0];
         $product = $this->productModel->get(["id", "product_name", "product_inventory", "product_price", "product_category", "remaining"], ["id"=>$request->input('id')])[0];
 
         $productInfo =
@@ -114,13 +132,15 @@ class customerController
 
         $data['status'] = true;
         $data['Data'] = 'Product Ordered successfully...';
-        $data['url'] = 'customer';
+        $data['url'] = 'customer/OrderForm';
         $count = $this->reportModel->create($productInfo);
         view('errors.erorr-success', $data);
     }
 
     public function productsTable(){
-        $data = $this->customerModel->get(["id", "customer_name", "customer_password", "customer_username"], ["customer_username" => $_SESSION['customer']]);
+        $this->session();
+
+        $data = $this->customerDetails();
         $products = $this->productModel->getAll();
         $out['customer'] = $data[0];
         $out['products'] = $products;
@@ -128,8 +148,10 @@ class customerController
     }
 
     public function reportsTable(){
+        $this->session();
+
         $data = $this->customerModel->get(["id", "customer_name", "customer_password", "customer_username"], ["customer_username" => $_SESSION['customer']]);
-        $customer = $this->customerModel->get(["id", "customer_name"], ["customer_username" => $_SESSION['customer']])[0];
+        $customer = $this->customerDetails()[0];
 
         $reports = $this->reportModel->get("*", ["customer_id" =>$customer['id']]);
         $out['customer'] = $data[0];
@@ -138,6 +160,8 @@ class customerController
     }
 
     public function reportDelete(){
+        $this->session();
+
         global $request;
         $id = $request->get_route_param('id');
         $count = $this->reportModel->get('*',["id"=>$id]);
@@ -154,11 +178,5 @@ class customerController
             $data['url'] = "customer/reportsTable";
         }
         view('errors.erorr-success', $data);
-    }
-
-    public function aaaa(){
-        global $request;
-
-        nice_dd($request->input('admin'));
     }
 }

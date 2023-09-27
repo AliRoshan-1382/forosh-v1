@@ -156,7 +156,7 @@
       <h1>Categories Tables</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><p>Home</p></li>
           <li class="breadcrumb-item">Tables</li>
           <li class="breadcrumb-item active">Categories</li>
         </ol>
@@ -186,8 +186,8 @@
                             <td><?= $category['id'] ?></td>
                             <td><?= $category['category_name'] ?></td>
                             <td>
-                              <a href="<?= site_url("") ?>" class="btn btn-danger">Delete</a>
-                              <a href="<?= site_url("") ?>" class="btn btn-info">Edit</a>
+                              <a href="<?= site_url("admin/CategoryDelete/".$category['id']) ?>" class="btn btn-danger">Delete</a>
+                              <a href="<?= site_url("admin/CategoryEditform/".$category['id'] ) ?>" class="btn btn-info">Edit</a>
                             </td>
                         </tr>
                     <?php endforeach ?>

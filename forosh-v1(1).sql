@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 25, 2023 at 05:49 PM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+-- Generation Time: Sep 27, 2023 at 09:11 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,9 +29,9 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `admin` (
   `id` int(11) NOT NULL,
-  `admin-name` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
-  `admin-username` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
-  `admin-password` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL
+  `admin-name` varchar(150) NOT NULL,
+  `admin-username` varchar(150) NOT NULL,
+  `admin-password` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 --
@@ -49,7 +49,7 @@ INSERT INTO `admin` (`id`, `admin-name`, `admin-username`, `admin-password`) VAL
 
 CREATE TABLE `category` (
   `id` int(11) NOT NULL,
-  `category_name` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL
+  `category_name` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 --
@@ -57,8 +57,7 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`id`, `category_name`) VALUES
-(2, 'kjhgk'),
-(1, 'll');
+(8, 'Desk');
 
 -- --------------------------------------------------------
 
@@ -68,10 +67,10 @@ INSERT INTO `category` (`id`, `category_name`) VALUES
 
 CREATE TABLE `customer` (
   `id` int(11) NOT NULL,
-  `customer_name` varchar(100) COLLATE utf8mb4_persian_ci NOT NULL,
-  `customer_username` varchar(100) COLLATE utf8mb4_persian_ci NOT NULL,
-  `customer_password` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL,
-  `access_login` varchar(20) COLLATE utf8mb4_persian_ci NOT NULL
+  `customer_name` varchar(100) NOT NULL,
+  `customer_username` varchar(100) NOT NULL,
+  `customer_password` varchar(250) NOT NULL,
+  `access_login` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 --
@@ -79,12 +78,7 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`id`, `customer_name`, `customer_username`, `customer_password`, `access_login`) VALUES
-(1, 'hdtgh', 'hdghdgh', '$2y$10$WVSSA8JL6CpasMtb3sLzS.R8LWyIJZVBqEu2ICgb7Yt5HAOgYQKzi', 'ok'),
-(2, 'fdfvd', 'hdtgh', '$2y$10$cRCjI7K9MjBoZuK9XO2yc.TxwTgkm4PKXxwtV7TcVQKwbdEo.s40K', 'ok'),
-(3, 'hfjfj', 'hjhfjf', '$2y$10$Wmrl7Je5IY9u9.jC2JlI0eNTZb1153usimwEfKVmdAOxH/huX4Tqm', 'ok'),
-(4, 'jhjhj', 'jhjhjh', '$2y$10$zneVjFom8i0aITJ0Sy2yZufw2b2dTOS4vFXhEINL7SwHE7SA4LN4a', 'ok'),
-(5, 'ali', 'ali', '$2y$10$Ul6b76PAmADPwQ00tFwCPuz3./D5JuDBVt6QwCvWLRhDUSzWnYupq', 'ok'),
-(6, 'hthhtht', 'hthth', '$2y$10$sSVKU9XDGC6.S8xoX4Dtx.hMjj0skaymPaBpNvmuqLvotDamffM8O', '');
+(13, 'ali', 'reza', '$2y$10$QtR/pnM/vhZ9DR2Vp.UjCe9mo6Uv3xC1D.mpr6v5s.e0uk06yzhxK', 'no');
 
 -- --------------------------------------------------------
 
@@ -94,13 +88,20 @@ INSERT INTO `customer` (`id`, `customer_name`, `customer_username`, `customer_pa
 
 CREATE TABLE `product` (
   `id` int(11) NOT NULL,
-  `product_name` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL,
+  `product_name` varchar(250) NOT NULL,
   `product_inventory` int(255) NOT NULL,
   `product_price` int(255) NOT NULL,
-  `product_category` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL,
+  `product_category` varchar(250) NOT NULL,
   `sales` int(255) NOT NULL,
   `remaining` int(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
+
+--
+-- Dumping data for table `product`
+--
+
+INSERT INTO `product` (`id`, `product_name`, `product_inventory`, `product_price`, `product_category`, `sales`, `remaining`) VALUES
+(24, 'desk-1', 270, 600, 'Desk', 270, 0);
 
 -- --------------------------------------------------------
 
@@ -110,16 +111,32 @@ CREATE TABLE `product` (
 
 CREATE TABLE `reports` (
   `id` int(11) NOT NULL,
-  `customer_name` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL,
+  `customer_name` varchar(250) NOT NULL,
   `customer_id` int(255) NOT NULL,
   `product_id` int(255) NOT NULL,
-  `product_name` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL,
-  `date` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL,
-  `time` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL,
-  `status` varchar(250) COLLATE utf8mb4_persian_ci NOT NULL DEFAULT 'pending',
+  `product_name` varchar(250) NOT NULL,
+  `time` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `status` varchar(250) NOT NULL DEFAULT 'pending',
   `price` int(255) NOT NULL,
-  `num_product` int(100) NOT NULL
+  `num_product` int(100) NOT NULL,
+  `total_price` int(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
+
+--
+-- Dumping data for table `reports`
+--
+
+INSERT INTO `reports` (`id`, `customer_name`, `customer_id`, `product_id`, `product_name`, `time`, `status`, `price`, `num_product`, `total_price`) VALUES
+(29, 'ahmad', 9, 19, 'black chair', '2023-09-27 14:08:56', 'failed', 1000, 50, 50000),
+(30, 'ahmad', 9, 20, 'black chair', '2023-09-27 14:21:58', 'failed', 600, 50, 30000),
+(31, 'ahmad', 9, 22, 'desk-1', '2023-09-27 14:27:56', 'accept', 900, 10, 9000),
+(32, 'ahmad', 9, 22, 'desk-1', '2023-09-27 16:25:20', 'accept', 900, 10, 9000),
+(33, 'ahmad', 9, 24, 'desk-1', '2023-09-27 16:58:13', 'accept', 600, 30, 18000),
+(34, 'ahmad', 9, 24, 'desk-1', '2023-09-27 18:01:19', 'accept', 600, 60, 36000),
+(35, 'ahmad', 9, 24, 'desk-1', '2023-09-27 18:01:48', 'accept', 600, 40, 24000),
+(36, 'ahmad', 9, 24, 'desk-1', '2023-09-27 18:03:28', 'accept', 600, 80, 48000),
+(37, 'ahmad', 9, 24, 'desk-1', '2023-09-27 18:03:40', 'accept', 600, 10, 6000),
+(38, 'ahmad', 9, 24, 'desk-1', '2023-09-27 18:45:32', 'accept', 600, 50, 30000);
 
 --
 -- Indexes for dumped tables
@@ -178,25 +195,25 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `reports`
 --
 ALTER TABLE `reports`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- Constraints for dumped tables
@@ -207,15 +224,6 @@ ALTER TABLE `reports`
 --
 ALTER TABLE `product`
   ADD CONSTRAINT `category` FOREIGN KEY (`product_category`) REFERENCES `category` (`category_name`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `reports`
---
-ALTER TABLE `reports`
-  ADD CONSTRAINT `cid` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `cname` FOREIGN KEY (`customer_name`) REFERENCES `customer` (`customer_name`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `pid` FOREIGN KEY (`customer_id`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `pname` FOREIGN KEY (`product_name`) REFERENCES `product` (`product_name`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

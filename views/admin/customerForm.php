@@ -156,7 +156,7 @@
       <h1>Customer Form</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item"><p>Home</p></li>
           <li class="breadcrumb-item">Forms</li>
           <li class="breadcrumb-item active">Customer</li>
         </ol>
@@ -191,6 +191,24 @@
                     <input type="password" name="cpassword" id="password" class="form-control" required>
                   </div>
                 </div>
+
+                <fieldset class="row mb-3">
+                  <legend class="col-form-label col-sm-2 pt-0">Access Login</legend>
+                  <div class="col-sm-10">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="login" id="gridRadios1" value="ok" checked>
+                      <label class="form-check-label" for="gridRadios1">
+                        allowed                      
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="login" id="gridRadios2" value="no">
+                      <label class="form-check-label" for="gridRadios2">
+                        not allowed
+                      </label>
+                    </div>
+                  </div>
+                </fieldset>
                 <div class="row mb-3">
                   <div class="col-sm-10">
                     <button type="submit" class="btn btn-primary">Submit Form</button>

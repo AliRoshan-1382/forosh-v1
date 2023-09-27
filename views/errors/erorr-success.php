@@ -38,7 +38,7 @@
                     <script>
                         setTimeout(function(){
                             location.href="<?= site_url($url) ?>"
-                        },1000);
+                        },2200);
                     </script>
             </div>
         </div>

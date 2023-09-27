@@ -24,18 +24,28 @@ class adminController{
         $this->categoryModel = new category();
         $this->productModel = new product();
         $this->reportModel = new report();
-        $this->factorModel = new factor();
+    }
+
+    public function session(){
+        if (isset($_SESSION['admin']) || isset($_SESSION['admin_id'])) 
+        {
+            $data = $this->adminModel->get(["id", "admin-name", "admin-username"], ["id" => $_SESSION['admin_id']])[0];
+
+            if ($data['admin-username'] != $_SESSION['admin']) {
+                session_unset();
+                Redirect(site_url(''), false);
+            }
+        }
     }
 
     public function dashboard()
     {
-        if (isset($_SESSION['admin'])) 
+        $this->session();
+        if (!empty($_SESSION['admin'])) 
         {
             $data = $this->adminModel->get(["id", "admin-name", "admin-password", "admin-username"], ["admin-username" => $_SESSION['admin']]);
             $customer_count = $this->customerModel->count([]);
-            // $sum_price = $this->factorModel->sum('Total_price', []);
             $sum_price = 100;
-            // $data = $this->adminModel->get(["id", "admin-name", "admin-password", "admin-username"], ["admin-username" => $_SESSION['admin']]);
 
             $out['admin'] = $data[0];
             $out['customer'] = $customer_count;
@@ -48,13 +58,11 @@ class adminController{
         {
             view('login.AdminLogin');
         }
-        // $data['users'] = $this->UserModel->get('*' , ["ORDER"=>"Created_At"]);
-        // $data['groups'] = $this->groupsModel->get('*',[]);
     }
 
     public function login(){
         global $request;
-        $data = $this->adminModel->get(["id","admin-name","admin-password","admin-username"], ["admin-username"=>$request->input('username')]);
+        $data = $this->adminModel->get(["id", "admin-name", "admin-password", "admin-username"], ["admin-username" => $request->input('username')]);
         if (empty($data)) {
             $data['status'] = false;
             $data['Data'] = 'Wrong Username...';
@@ -67,6 +75,7 @@ class adminController{
 
             if (password_verify($request->input('password'), $adminRow['admin-password'])) {
                 $_SESSION['admin'] = $request->input('username');
+                $_SESSION['admin_id'] = $adminRow['id'];
                 Redirect(site_url(''), false);
             }
             else 
@@ -85,21 +94,28 @@ class adminController{
             Redirect(site_url(''), false);
         }
     }
-
+    public function AdminDetails(){
+        return $data = $this->adminModel->get(["id", "admin-name", "admin-password", "admin-username"], ["admin-username" => $_SESSION['admin']]);
+    }
     public function customerForm(){
-        $data = $this->adminModel->get(["id", "admin-name", "admin-password", "admin-username"], ["admin-username" => $_SESSION['admin']]);
+        $this->session();
+        $data = $this->AdminDetails();
         $out['admin'] = $data[0];
         view('admin.customerForm', $out);
     }
 
     public function categoryForm(){
-        $data = $this->adminModel->get(["id", "admin-name", "admin-password", "admin-username"], ["admin-username" => $_SESSION['admin']]);
+        $this->session();
+
+        $data = $this->AdminDetails();
         $out['admin'] = $data[0];
         view('admin.categoryForm', $out);
     }
 
     public function productForm(){
-        $data = $this->adminModel->get(["id", "admin-name", "admin-password", "admin-username"], ["admin-username" => $_SESSION['admin']]);
+        $this->session();
+
+        $data = $this->AdminDetails();
         $x = $this->categoryModel->getAll();
         $out['admin'] = $data[0];
         $out['category'] = $x;
@@ -108,6 +124,8 @@ class adminController{
     }
 
     public function addCustomer(){
+        $this->session();
+
         global $request;
 
         $Count = $this->customerModel->count(["customer_username"=>$request->input('cusername')]);
@@ -127,17 +145,20 @@ class adminController{
                 "customer_name"=>$request->input('cname'),
                 "customer_username"=>$request->input('cusername'),
                 "customer_password"=>$password,
+                "access_login"=>$request->input('login'),
             ];
 
             $data['status']= true;
             $data['Data'] = 'Customer Added successfully...';
-            $data['url'] = '';
+            $data['url'] = 'admin/customersTable';
             $count = $this->customerModel->create($userInfo);
             view('errors.erorr-success', $data);
         }
     }
 
     public function addcategory(){
+        $this->session();
+
         global $request;
 
         $Count = $this->categoryModel->count(["category_name" => $request->input('cname')]);
@@ -158,13 +179,15 @@ class adminController{
 
             $data['status'] = true;
             $data['Data'] = 'Category Added successfully...';
-            $data['url'] = '';
+            $data['url'] = 'admin/categoriesTable';
             $count = $this->categoryModel->create($userInfo);
             view('errors.erorr-success', $data);
         }
     }
 
     public function addproduct(){
+        $this->session();
+
         global $request;
         $Count = $this->productModel->count(["product_name" => $request->input('pname')]);
         if ($Count == 1) {
@@ -191,33 +214,44 @@ class adminController{
     }
 
     public function productsTable(){
-        $data = $this->adminModel->get(["id", "admin-name", "admin-password", "admin-username"], ["admin-username" => $_SESSION['admin']]);
-        $products = $this->productModel->getAll();
-        $out['admin'] = $data[0];
-        $out['products'] = $products;
-        view('admin.productTable', $out);
+        $this->session();
+
+        if (isset($_SESSION['admin'])) {
+            $data = $this->AdminDetails();
+            $products = $this->productModel->getAll();
+            $out['admin'] = $data[0];
+            $out['products'] = $products;
+            view('admin.productTable', $out);
+        }
+        else{
+            Redirect(site_url(''), false);
+        }
     }
 
     public function customersTable(){
-        $data = $this->adminModel->get(["id", "admin-name", "admin-password", "admin-username"], ["admin-username" => $_SESSION['admin']]);
+        $this->session();
+
+        $data = $this->AdminDetails();
         $customer = $this->customerModel->getAll();
         $out['admin'] = $data[0];
         $out['customer'] = $customer;
         view('admin.customersTable', $out);
     }
 
-    
     public function reportsTable(){
-        $data = $this->adminModel->get(["id", "admin-name", "admin-password", "admin-username"], ["admin-username" => $_SESSION['admin']]);
+        $this->session();
+
+        $data = $this->AdminDetails();
         $report = $this->reportModel->getAll();
         $out['admin'] = $data[0];
         $out['report'] = $report;
         view('admin.reportsTable', $out);
     }
 
-    
     public function categoriesTable(){
-        $data = $this->adminModel->get(["id", "admin-name", "admin-password", "admin-username"], ["admin-username" => $_SESSION['admin']]);
+        $this->session();
+
+        $data = $this->AdminDetails();
         $category = $this->categoryModel->getAll();
         $out['admin'] = $data[0];
         $out['category'] = $category;
@@ -225,15 +259,24 @@ class adminController{
     }
 
     public function ProductDelete(){
+        $this->session();
+
         global $request;
         $id = $request->get_route_param('id');
         $count = $this->productModel->get('*',["id"=>$id]);
 
         if (count($count) == 1) {
-            $this->productModel->delete(["id"=>$id]);
-            $data['status'] = true;
-            $data['Data'] = "Product Deleted Successfully";
-            $data['url'] = "admin/productsTable";
+            $Rowcount = $this->reportModel->get('*',["product_id"=>$id, "status"=>"pending"]);
+            if (count($Rowcount) == 0) {
+                $this->productModel->delete(["id"=>$id]);
+                $data['status'] = true;
+                $data['Data'] = "Product Deleted Successfully";
+                $data['url'] = "admin/productsTable";
+            }else {
+                $data['status'] = false;
+                $data['Data'] = "Pending Report with This Product Already Exist...";
+                $data['url'] = "admin/reportsTable";
+            }
         }
         elseif(count($count) != 1) {
             $data['status'] = false;
@@ -243,178 +286,416 @@ class adminController{
         view('errors.erorr-success', $data);
     }
 
+    public function ProductEditform(){
+        $this->session();
 
-    // public function Userform()
-    // {
-    //     $data['users'] = $this->UserModel->get('*' , ["ORDER"=>"Created_At"]);
-    //     $data['groups'] = $this->groupsModel->get('*',[]);
-    //     view('user.UserForm', $data);
-    // }
+        global $request;
+        $id = $request->get_route_param('id');
+        $product = $this->productModel->get('*',["id"=>$id])[0];
 
-    // public function UserEdit()
-    // {
-    //     global $request;
-    //     $id = $request->get_route_param('id');
-    //     $out['groups'] = $this->groupsModel->get('*',[]);
-    //     $data = $this->UserModel->get(["id","Fname","Lname","MeliCode","Address","PostalCode","Gender","group_name "], ["id"=>$id]);
-    //     foreach ($data as $user) {
+        if (!empty($product)) {
+            $category = $this->categoryModel->getAll();
 
-    //     }
-    //     $out['user'] = $user;
-    //     view('user.UserEditForm',$out);   
-    // }
+            $out['product'] = $product;
+            $out['category'] = $category;
+            return view('admin.productEditform', $out);
+        }else {
 
-    // public function AdduserEdit()
-    // {
-    //     global $request;
-    //     $userInfo = [
-    //         "Fname"=>$request->input('FirstName'),
-    //         "Lname"=>$request->input('LastName'),
-    //         "MeliCode"=>$request->input('MelliCode'),
-    //         "Address"=>$request->input('Address'),
-    //         "PostalCode"=>$request->input('PostalCode'),
-    //         "Gender"=>$request->input('gender'),
-    //         "group_name"=>$request->input('group'),
-    //     ]; 
+            $data['status'] = false;
+            $data['Data'] = "Problem ...";
+            $data['url'] = "admin/productsTable";        
+            view('errors.erorr-success', $data);
+        }
+    }
 
-    //     $MelliCount = $this->UserModel->get("MeliCode" ,["MeliCode"=>$userInfo['MeliCode']]);
+    public function ProductEdit(){
+        $this->session();
 
-    //     $data['id'] = $request->input('id');
-    //     if (count($MelliCount) == 1) {
-    //         $count =count($this->UserModel->get('MeliCode' ,["AND" => [
-    //             "MeliCode"=>$request->input('MelliCode'),
-    //             "id"=>$request->input('id')
-    //         ]]));
+        global $request;
+        $Count = $this->productModel->count(["id" => $request->input('id')]);
 
-    //         if ($count == 1) {
-    //                 $data['status']= true;
-    //                 $count = $this->UserModel->update($userInfo, ["id"=>$request->input('id')]);
-    //                 view('user.user-edit',$data); 
-    //         }
-    //         else 
-    //         {
-    //                 $data['status'] = false;
-    //                 view('user.user-edit',$data);    
-    //         }
-    //     }
-    //     elseif(count($MelliCount) == 0)
-    //     {
-    //         $data['status']= true;
-    //         $count = $this->UserModel->update($userInfo, ["id"=>$request->input('id')]);
-    //         view('user.user-edit',$data);   
-    //     }
-    // }
+        if ($Count == 1) {
+            $product = $this->productModel->get('*',["id"=>$request->input('id')])[0];
+            $new_inventory = $product['product_inventory'] + $request->input('inventory');
+            $new_remaining = $product['remaining'] + $request->input('inventory');
 
-    // public function Useradd()
-    // {
-    //     global $request;
-    //     $userInfo = [
-    //         "Fname"=>$request->input('FirstName'),
-    //         "Lname"=>$request->input('LastName'),
-    //         "MeliCode"=>$request->input('MelliCode'),
-    //         "Address"=>$request->input('Address'),
-    //         "PostalCode"=>$request->input('PostalCode'),
-    //         "Gender"=>$request->input('gender'),
-    //         "group_name"=>$request->input('group'),
-    //     ];
-    //     $MelliCount = $this->UserModel->get('MeliCode' ,["MeliCode"=>$request->input('MelliCode')]);
-    //     if (count($MelliCount) == 0) {
-    //         $data['status']= true;
-    //         $count = $this->UserModel->create($userInfo);
-    //         view('user.add-user',$data);    
-    //     }else {
-    //         $data['status'] = false;
-    //         view('user.add-user',$data);    
-    //     }
-    // }
-
-    // public function Userdelete()
-    // {
-    //     global $request;
-    //     $id = $request->get_route_param('id');
-    //     $data['deleted_count'] = $this->UserModel->delete(["id"=>$id]);
-    //     view('user.delete-result',$data);    
-    // }
-
-    // public function GroupsTable()
-    // {
-    //     $data['users'] = $this->UserModel->get('*' , ["ORDER"=>"Created_At"]);
-    //     $data['groups'] = $this->groupsModel->get('*',[]);
-    //     view('group.GroupTable', $data);
-    // }
-
-    // public function Groupform()
-    // {
-    //     $data['users'] = $this->UserModel->get('*' , ["ORDER"=>"Created_At"]);
-    //     $data['groups'] = $this->groupsModel->get('*',[]);
-    //     view('group.GroupForm', $data);
-    // }
-
-    // public function GroupEdit()
-    // {
-    //     global $request;
-    //     $id = $request->get_route_param('id');
-    //     $data = $this->groupsModel->get(["Gname","id"], ["id"=>$id]);
-    //     foreach ($data as $group) {
-
-    //     }
-    //     view('group.GroupEditForm',$group);   
-    // }
-
-    // public function AddGroupEdit()
-    // {
-    //     global $request;
-    //     $id = $request->input('id');
-    //     $Gname = $request->input('Gname');
-
-    //     $groupCount = $this->groupsModel->get("Gname" ,["Gname"=>$Gname]);
-
-    //     if (count($groupCount) == 1) {
-    //         $data['status'] = false;
-    //         view('group.group-edit',$data);  
-    //     }
-    //     else{
-    //         $data['status'] = true;
-    //         $data['editedCount'] = $this->groupsModel->update(["Gname"=>$Gname], ["id"=>$id]);
-    //         view('group.group-edit',$data);  
-    //     }
-    // }
+            if ($new_remaining < 0) {
+        
+                $data['status'] = false;
+                $data['Data'] = "Product inventory cannot be negative ...";
+                $data['url'] = "admin/productsTable";
+            }
+            else 
+            {
+                $check_duplicate_name = $this->productModel->get('*',["product_name"=>$request->input('name')])[0];
+                if ($product['product_name'] == $check_duplicate_name['product_name']) 
+                {
+                    $userInfo = [
+                        "product_name"=>$request->input('name'),
+                        "product_inventory"=>$new_inventory,
+                        "product_price"=>$request->input('price'),
+                        "product_category"=>$request->input('category'),
+                        "remaining"=>$new_remaining,
+                    ]; 
     
-
-    // public function Groupadd()
-    // {
-    //     global $request;
-    //     $groupName = $request->input('group');
-
-    //     $Count = $this->groupsModel->count(["Gname"=>$groupName]);
-    //     if ($Count == 0) {
-    //         $data['status'] = true;
-    //         $data['Gname'] = $this->groupsModel->create(["Gname"=>$groupName]);
-    //     }else {
-    //         $data['status'] = false;
-    //     }
-    //     view('group.add-group',$data);    
-    // }
-
-    // public function Groupdelete()
-    // {
-    //     global $request;
-    //     $id = $request->get_route_param('id');
-
-    //     $Gname =  $this->groupsModel->get('Gname', ["id"=>$id])[0];
-
-    //     $count = $this->UserModel->count(["group_name"=>$Gname]);
-    //     if ($count > 0) {
-    //         $data['status'] = false;
-    //         view('group.delete-result',$data);    
-    //     }
-    //     else 
-    //     {
-    //         $data['status'] = true;
-    //         $data['deleted_count'] = $this->groupsModel->delete(["id"=>$id]);
-    //         view('group.delete-result',$data);    
-    //     }
-    // }
+                    $count = $this->productModel->update($userInfo, ["id"=>$request->input('id')]);
     
+                    if ($count == 1) {         
+                        $data['status'] = true;
+                        $data['Data'] = "Product Updated Successfully ...";
+                        $data['url'] = "admin/productsTable";
+                    }
+                }
+                else 
+                {
+                    $data['status'] = false;
+                    $data['Data'] = "Product With This Name Already Exist...";
+                    $data['url'] = "admin/productsTable";
+                }
+            }
+        }
+        else 
+        {
+            $data['status'] = false;
+            $data['Data'] = "Problem ...";
+            $data['url'] = "admin/productsTable";
+        }
+        view('errors.erorr-success', $data);
+    }
+
+    public function CategoryDelete(){
+        $this->session();
+
+        global $request;
+        $id = $request->get_route_param('id');
+        $category = $this->categoryModel->get('*',["id"=>$id])[0];
+        if (!empty($category)) {
+            $category_name = $category['category_name'];
+            $Count = $this->productModel->count(["product_category" => $category_name]);
+
+            if ($Count == 1) {
+                $data['status'] = false;
+                $data['Data'] = "Product With This Category Already Exist, First Change Product Category To Delete This Category ...";
+                $data['url'] = "admin/productsTable";   
+            }
+            else
+            {
+                $this->categoryModel->delete(["id"=>$id]);
+                $data['status'] = true;
+                $data['Data'] = "Category Deleted Successfully";
+                $data['url'] = "admin/categoriesTable";
+            }
+
+        }
+        else {
+            $data['status'] = false;
+            $data['Data'] = "Problem ...";
+            $data['url'] = "admin/categoriesTable";        
+        }
+        view('errors.erorr-success', $data);
+    }
+
+    public function CategoryEditform(){
+        $this->session();
+
+        global $request;
+        $id = $request->get_route_param('id');
+        $category = $this->categoryModel->get('*',["id"=>$id])[0];
+
+        if (!empty($category)) {
+
+            $out['category'] = $category;
+            return view('admin.categoryEditform', $out);
+        }else {
+
+            $data['status'] = false;
+            $data['Data'] = "Problem ...";
+            $data['url'] = "admin/categoriesTable";        
+            view('errors.erorr-success', $data);
+        }
+    }
+
+    public function CategoryEdit(){
+        $this->session();
+
+        global $request;
+        $Count = $this->categoryModel->count(["id" => $request->input('id')]);
+
+        if ($Count == 1) {
+
+            $input_category_name = $request->input('name');
+            $input_category_id = $request->input('id');
+
+            $category = $this->categoryModel->get('*',["id"=>$input_category_id])[0];
+
+            if ($input_category_name == $category['category_name']) {
+                $data['status'] = true;
+                $data['Data'] = "Category Updated Successfully ...";
+                $data['url'] = "admin/categoriesTable";
+            }
+            else 
+            {
+                $category_check = $this->categoryModel->get('*',["category_name"=>$input_category_name]);
+                if (empty($category_check)) 
+                {
+                    $userInfo = 
+                    [
+                        "category_name"=>$request->input('name'),
+                    ]; 
+
+                    $RowCount = $this->categoryModel->update($userInfo, ["id"=>$input_category_id]);
+
+                    if ($RowCount == 1) {         
+                        $data['status'] = true;
+                        $data['Data'] = "Category Updated Successfully ...";
+                        $data['url'] = "admin/categoriesTable";
+                    }
+                    else 
+                    {
+                        $data['status'] = true;
+                        $data['Data'] = "Problem ...";
+                        $data['url'] = "admin/categoriesTable";
+                    }
+                }
+                else 
+                {
+                    $data['status'] = false;
+                    $data['Data'] = "Category With This Name Already Exist...";
+                    $data['url'] = "admin/categoriesTable";        
+                }
+            }
+        }
+        else 
+        {
+            $data['status'] = false;
+            $data['Data'] = "Problem ...";
+            $data['url'] = "admin/categoriesTable";
+        }
+        view('errors.erorr-success', $data);
+    }
+
+    public function acceptOrder(){
+        $this->session();
+
+        global $request;
+        $report_id = $request->get_route_param('id');
+        $report = $this->reportModel->get('*',["id"=>$report_id])[0];
+
+        if (!empty($report)) {
+            $product = $this->productModel->get('*',["id"=>$report['product_id']])[0];
+            if ($report['num_product'] > $product['remaining']) {
+                $data['url'] = "admin/reportsTable";
+                $data['status'] = false;
+                $data['Data'] = "The balance of the amount ordered by the customer is less than the amount ..";            
+            }
+            else
+            {
+                $updateReport = [
+                    "status"=>'accept',
+                ]; 
+                $count = $this->reportModel->update($updateReport, ["id"=>$report_id]);
+                if ($count == 1) {
+                    $new_sale = $product['sales'] + $report['num_product'];
+                    $new_remaining = $product['remaining'] - $report['num_product'];
+                    $productUpdate = [
+                        "sales"=>$new_sale,
+                        "remaining"=>$new_remaining,
+                    ]; 
+                    $count = $this->productModel->update($productUpdate, ["id"=>$product['id']]);
+
+                    if ($count == 1) {
+                        $data['url'] = "admin/reportsTable";
+                        $data['status'] = true;
+                        $data['Data'] = "Report Accepted Successfully";
+                    }
+                    else
+                    {
+                        $data['url'] = "admin/reportsTable";
+                        $data['status'] = false;
+                        $data['Data'] = "Problem ...";
+                    }
+                }
+                else 
+                {
+                    $data['url'] = "admin/reportsTable";
+                    $data['status'] = false;
+                    $data['Data'] = "Problem ...";
+                }
+            }
+        }
+        else{
+            $data['url'] = "admin/reportsTable";
+            $data['status'] = false;
+            $data['Data'] = "Problem ...";
+        }
+        view('errors.erorr-success', $data);
+    }
+
+    public function cancelOrder(){
+        $this->session();
+
+        global $request;
+        $report_id = $request->get_route_param('id');
+        $report = $this->reportModel->get('*',["id"=>$report_id])[0];
+
+        if (!empty($report)) 
+        {
+            $updateReport = [
+                "status"=>'failed',
+            ]; 
+            $count = $this->reportModel->update($updateReport, ["id"=>$report_id]);
+
+            if ($count == 1) {
+                $data['url'] = "admin/reportsTable";
+                $data['status'] = true;
+                $data['Data'] = "Report Rejected Successfully";
+            }
+            else 
+            {
+                $data['url'] = "admin/reportsTable";
+                $data['status'] = false;
+                $data['Data'] = "Problem ...";
+            }
+        }
+        else
+        {
+            $data['url'] = "admin/reportsTable";
+            $data['status'] = false;
+            $data['Data'] = "Problem ...";
+        }
+        view('errors.erorr-success', $data);
+    }
+
+    public function customerDelete(){
+        global $request;
+        $this->session();
+
+        $id = $request->get_route_param('id');
+
+        $count = $this->customerModel->get('*',["id"=>$id]);
+
+        if (count($count) == 1) 
+        {
+            $check_report = $this->reportModel->count(["status" => "pending", "customer_id" => $id]);
+            if ($check_report > 0) {
+                $data['status'] = false;
+                $data['Data'] = "There is Pending Report For This Customer, First Accept or Reject Her/Him Report ...";
+                $data['url'] = "admin/reportsTable";
+            }
+            elseif($check_report == 0) 
+            {
+                $RowCount =  $this->customerModel->delete(["id"=>$id]);
+
+                if ($RowCount == 1) {
+                    $data['status'] = true;
+                    $data['Data'] = "Customer Deleted Successfully";
+                    $data['url'] = "admin/customersTable";
+                } 
+                else 
+                {
+                    $data['status'] = false;
+                    $data['Data'] = "Problem ...";
+                    $data['url'] = "admin/customersTable";
+                }
+            }
+        }
+        else 
+        {
+            $data['status'] = false;
+            $data['Data'] = "Problem ...";
+            $data['url'] = "admin/customersTable";
+        }
+        view('errors.erorr-success', $data);
+    }
+
+    public function customerEditform(){
+        global $request;
+
+        $this->session();
+
+        $id = $request->get_route_param('id');
+        $customer = $this->customerModel->get('*',["id"=>$id])[0];
+
+        if (!empty($customer)) {
+
+            $out['customer'] = $customer;
+            return view('admin.CustomerEditform', $out);
+        }else {
+
+            $data['status'] = false;
+            $data['Data'] = "Problem ...";
+            $data['url'] = "admin/customersTable";        
+            view('errors.erorr-success', $data);
+        }
+    }
+
+    public function customerEdit(){
+
+        $this->session();
+
+        global $request;
+        $Count = $this->customerModel->count(["id" => $request->input('id')]);
+
+        if ($Count == 1) {
+
+            $input_customer_username = $request->input('Username');
+            $input_customer_id = $request->input('id');
+
+            $customer = $this->customerModel->get('*',["id"=>$input_customer_id])[0];
+
+            if ($input_customer_username == $customer['customer_username']) {
+
+                $userInfo = 
+                [
+                    "access_login"=>$request->input('login'),
+                ]; 
+
+                $RowCount = $this->customerModel->update($userInfo, ["id"=>$input_customer_id]);
+
+                $data['status'] = true;
+                $data['Data'] = "Customer Updated Successfully ...";
+                $data['url'] = "admin/customersTable";
+            }
+            else 
+            {
+                $customer_check = $this->customerModel->get('*',["customer_username"=>$input_customer_username]);
+                if (empty($customer_check)) 
+                {
+                    $userInfo = 
+                    [
+                        "customer_username"=>$request->input('Username'),
+                        "access_login"=>$request->input('login'),
+                    ]; 
+
+                    $RowCount = $this->customerModel->update($userInfo, ["id"=>$input_customer_id]);
+
+                    if ($RowCount == 1) {         
+                        $data['status'] = true;
+                        $data['Data'] = "Customer Updated Successfully ...";
+                        $data['url'] = "admin/customersTable";
+                    }
+                    else 
+                    {
+                        $data['status'] = true;
+                        $data['Data'] = "Problem ...";
+                        $data['url'] = "admin/customersTable";
+                    }
+                }
+                else 
+                {
+                    $data['status'] = false;
+                    $data['Data'] = "Customer With This Name Already Exist...";
+                    $data['url'] = "admin/customersTable";        
+                }
+            }
+        }
+        else 
+        {
+            $data['status'] = false;
+            $data['Data'] = "Problem ...";
+            $data['url'] = "admin/customersTable";
+        }
+        view('errors.erorr-success', $data);
+    }
 }
 ?>

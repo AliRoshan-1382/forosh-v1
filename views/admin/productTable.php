@@ -156,7 +156,7 @@
       <h1>Products Tables</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><p>Home</p></li>
           <li class="breadcrumb-item">Tables</li>
           <li class="breadcrumb-item active">Products</li>
         </ol>
@@ -180,6 +180,8 @@
                     <th scope="col">Inventory</th>
                     <th scope="col">Price</th>
                     <th scope="col">Category</th>
+                    <th scope="col">Remaining</th>
+                    <th scope="col">Sales</th>
                     <th scope="col"></th>
                   </tr>
                 </thead>
@@ -191,9 +193,11 @@
                             <td><?= $product['product_inventory'] ?></td>
                             <td><?= $product['product_price'] ?></td>
                             <td><?= $product['product_category'] ?></td>
+                            <td><?= $product['remaining'] ?></td>
+                            <td><?= $product['sales'] ?></td>
                             <td>
                               <a href="<?= site_url("admin/ProductDelete/".$product['id']) ?>" class="btn btn-danger">Delete</a>
-                              <a href="<?= site_url("") ?>" class="btn btn-info">Edit</a>
+                              <a href="<?= site_url("admin/ProductEditform/".$product['id'])?>" class="btn btn-info">Edit</a>
                             </td>
                         </tr>
                     <?php endforeach ?>

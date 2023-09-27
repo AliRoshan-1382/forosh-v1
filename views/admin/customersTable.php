@@ -156,7 +156,7 @@
       <h1>Customers Tables</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><p>Home</p></li>
           <li class="breadcrumb-item">Tables</li>
           <li class="breadcrumb-item active">Customers</li>
         </ol>
@@ -178,6 +178,7 @@
                     <th scope="col">id</th>
                     <th scope="col">customer name</th>
                     <th scope="col">customer username</th>
+                    <th scope="col">Access</th>
                     <th scope="col"></th>
                   </tr>
                 </thead>
@@ -187,9 +188,10 @@
                             <td><?= $customer['id'] ?></td>
                             <td><?= $customer['customer_name'] ?></td>
                             <td><?= $customer['customer_username'] ?></td>
+                            <td><?= $customer['access_login'] ?></td>
                             <td>
-                              <a href="<?= site_url("") ?>" class="btn btn-danger">Delete</a>
-                              <a href="<?= site_url("") ?>" class="btn btn-info">Edit</a>
+                              <a href="<?= site_url("admin/customerDelete/". $customer['id']) ?>" class="btn btn-danger">Delete</a>
+                              <a href="<?= site_url("admin/customerEditform/". $customer['id']) ?>" class="btn btn-info">Edit</a>
                             </td>
                         </tr>
                     <?php endforeach ?>

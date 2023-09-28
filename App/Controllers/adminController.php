@@ -26,6 +26,9 @@ class adminController{
         $this->reportModel = new report();
     }
 
+    public function check_login(){
+        
+    }
     
     public function session(){
         if (isset($_SESSION['admin']) && isset($_SESSION['admin_id'])) 

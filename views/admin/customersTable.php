@@ -190,7 +190,7 @@
                             <td><?= $customer['customer_username'] ?></td>
                             <td><?= $customer['access_login'] ?></td>
                             <td>
-                              <a href="<?= site_url("admin/customerDelete/". $customer['id']) ?>" class="btn btn-danger">Delete</a>
+                              <!-- <a href="<?= site_url("admin/customerDelete/". $customer['id']) ?>" class="btn btn-danger">Delete</a> -->
                               <a href="<?= site_url("admin/customerEditform/". $customer['id']) ?>" class="btn btn-info">Edit</a>
                             </td>
                         </tr>

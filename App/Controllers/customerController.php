@@ -44,16 +44,30 @@ class customerController
                 Redirect(site_url('customer'), false);
             }
         }
-        // else 
-        // {
-        //     unset($_SESSION['customer']);
-        //     Redirect(site_url('customer'), false);
-        // }
     }
+    public function check_login(){
+        $data = $this->customerDetails();
 
+        if (empty($data)) {
+            unset($_SESSION['customer']);
+            Redirect(site_url('customer'), false);
+        }
+        else 
+        {
+            if ($data['access_login'] == 'no') {
+                unset($_SESSION['customer']);
+                Redirect(site_url('customer'), false);
+            }   
+        }
+    }
     public function dashboard()
     {
+        // $this->check_login();
         if (!empty($_SESSION['customer'])) {
+            
+        $this->session();
+        $this->check_login();
+
         $data = $this->customerModel->get(["id", "customer_name", "customer_password", "customer_username"], ["customer_username" => $_SESSION['customer']]);
 
         $product = $this->productModel->get(["id", "product_name", "product_inventory", "product_price", "product_category", "remaining"], ["remaining[>]" => 1]);
@@ -115,6 +129,7 @@ class customerController
 
     public function OrderForm(){
         $this->session();
+        $this->check_login();
 
         $data = $this->customerDetails();
         $product = $this->productModel->get(["id", "product_name", "product_inventory", "product_price", "product_category", "remaining"], ["remaining[>]" => 1]);
@@ -125,6 +140,7 @@ class customerController
 
     public function addOrder(){
         $this->session();
+        $this->check_login();
 
         global $request;
         $customer = $this->customerDetails()[0];
@@ -151,6 +167,7 @@ class customerController
 
     public function productsTable(){
         $this->session();
+        $this->check_login();
 
         $data = $this->customerDetails();
         $products = $this->productModel->getAll();
@@ -161,7 +178,7 @@ class customerController
 
     public function reportsTable(){
         $this->session();
-
+        $this->check_login();
         $data = $this->customerModel->get(["id", "customer_name", "customer_password", "customer_username"], ["customer_username" => $_SESSION['customer']]);
         $customer = $this->customerDetails()[0];
 
@@ -173,6 +190,7 @@ class customerController
 
     public function reportDelete(){
         $this->session();
+        $this->check_login();
 
         global $request;
         $id = $request->get_route_param('id');

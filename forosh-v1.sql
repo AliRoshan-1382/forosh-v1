@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 28, 2023 at 09:02 AM
+-- Generation Time: Sep 28, 2023 at 10:39 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -57,6 +57,7 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`id`, `category_name`) VALUES
+(9, 'Chair'),
 (8, 'Desk');
 
 -- --------------------------------------------------------
@@ -72,14 +73,6 @@ CREATE TABLE `customer` (
   `customer_password` varchar(250) NOT NULL,
   `access_login` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
-
---
--- Dumping data for table `customer`
---
-
-INSERT INTO `customer` (`id`, `customer_name`, `customer_username`, `customer_password`, `access_login`) VALUES
-(13, 'ali', 'reza', '$2y$10$QtR/pnM/vhZ9DR2Vp.UjCe9mo6Uv3xC1D.mpr6v5s.e0uk06yzhxK', 'ok'),
-(14, 'ali', 'ali', '$2y$10$S23ir24jzk88bui9EfxEWu2xSwXewHfIGwOYXB/2Mb8JlaM0X0ngG', 'ok');
 
 -- --------------------------------------------------------
 
@@ -102,7 +95,8 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `product_name`, `product_inventory`, `product_price`, `product_category`, `sales`, `remaining`) VALUES
-(24, 'desk-1', 330, 600, 'Desk', 320, 10);
+(24, 'desk-1', 385, 600, 'Desk', 385, 0),
+(25, 'chair', 160, 700, 'Chair', 160, 0);
 
 -- --------------------------------------------------------
 
@@ -139,7 +133,12 @@ INSERT INTO `reports` (`id`, `customer_name`, `customer_id`, `product_id`, `prod
 (37, 'ahmad', 9, 24, 'desk-1', '2023-09-27 18:03:40', 'accept', 600, 10, 6000),
 (38, 'ahmad', 9, 24, 'desk-1', '2023-09-27 18:45:32', 'accept', 600, 50, 30000),
 (39, 'ali', 14, 24, 'desk-1', '2023-09-28 06:47:23', 'accept', 600, 50, 30000),
-(40, 'ali', 14, 24, 'desk-1', '2023-09-28 06:47:30', 'failed', 600, 60, 36000);
+(41, 'ali', 14, 24, 'desk-1', '2023-09-28 07:11:15', 'accept', 600, 5, 3000),
+(42, 'ali', 13, 24, 'desk-1', '2023-09-28 07:10:53', 'accept', 600, 10, 6000),
+(43, 'ali', 14, 24, 'desk-1', '2023-09-28 07:21:14', 'accept', 600, 46, 27600),
+(44, 'ali', 14, 25, 'chair', '2023-09-28 07:21:18', 'accept', 700, 150, 105000),
+(51, 'ali', 14, 24, 'desk-1', '2023-09-28 07:23:34', 'accept', 600, 4, 2400),
+(52, 'ali', 14, 25, 'chair', '2023-09-28 07:23:37', 'accept', 700, 10, 7000);
 
 --
 -- Indexes for dumped tables
@@ -198,25 +197,25 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `reports`
 --
 ALTER TABLE `reports`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- Constraints for dumped tables

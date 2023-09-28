@@ -104,7 +104,7 @@
                 <div class="row mb-3">
                   <div class="col-sm-10">
                     <button type="submit" class="btn btn-primary">Submit Form</button>
-                    <a href="<?= site_url('admin/categoriesTable') ?>" class="btn btn-info">Back To Category Table</a>
+                    <a href="<?= site_url('admin/customersTable') ?>" class="btn btn-info">Back To Customer Table</a>
                   </div>
                 </div>
                 

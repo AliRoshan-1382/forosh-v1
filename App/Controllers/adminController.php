@@ -26,8 +26,9 @@ class adminController{
         $this->reportModel = new report();
     }
 
+    
     public function session(){
-        if (isset($_SESSION['admin']) || isset($_SESSION['admin_id'])) 
+        if (isset($_SESSION['admin']) && isset($_SESSION['admin_id'])) 
         {
             $data = $this->adminModel->get(["id", "admin-name", "admin-username"], ["id" => $_SESSION['admin_id']])[0];
 
@@ -35,12 +36,14 @@ class adminController{
                 session_unset();
                 Redirect(site_url(''), false);
             }
+        }else {
+            Redirect(site_url(''), false);
         }
     }
 
     public function dashboard()
     {
-        $this->session();
+        // $this->session();
         if (!empty($_SESSION['admin'])) 
         {
             $data = $this->adminModel->get(["id", "admin-name", "admin-password", "admin-username"], ["admin-username" => $_SESSION['admin']]);
@@ -90,7 +93,7 @@ class adminController{
 
     public function logout(){
         if (isset($_SESSION['admin'])) {
-            session_unset();
+            unset($_SESSION['admin']);
             Redirect(site_url(''), false);
         }
     }
@@ -230,6 +233,12 @@ class adminController{
 
     public function customersTable(){
         $this->session();
+
+        // if (isset($_SESSION['admin'])) {
+
+        // }else {
+        //     Redirect(site_url(''), false);
+        // }
 
         $data = $this->AdminDetails();
         $customer = $this->customerModel->getAll();
@@ -649,7 +658,7 @@ class adminController{
                 [
                     "access_login"=>$request->input('login'),
                 ]; 
-
+                
                 $RowCount = $this->customerModel->update($userInfo, ["id"=>$input_customer_id]);
 
                 $data['status'] = true;

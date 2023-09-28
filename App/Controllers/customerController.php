@@ -29,18 +29,23 @@ class customerController
     public function session(){
         if (isset($_SESSION['customer']) || isset($_SESSION['customer_id'])) 
         {
-            $data = $this->customerModel->get(["id", "customer_name", "customer_password", "customer_username"], ["id" => $_SESSION['customer_id']])[0];
+            $data = $this->customerModel->get(["id", "customer_name", "customer_password", "customer_username", "access_login"], ["id" => $_SESSION['customer_id']])[0];
 
             if ($data['customer_username'] != $_SESSION['customer']) {
                 session_unset();
                 Redirect(site_url('customer'), false);
             }
+            if ($data['access_login'] == 'no') {
+                session_unset();
+                Redirect(site_url('customer'), false);            
+            }
+        }else {
+            Redirect(site_url('customer'), false);
         }
     }
 
     public function dashboard()
     {
-        $this->session();
         if (!empty($_SESSION['customer'])) {
             $data = $this->customerModel->get(["id", "customer_name", "customer_password", "customer_username"], ["customer_username" => $_SESSION['customer']]);
 
@@ -92,7 +97,7 @@ class customerController
     public function logout()
     {
         if (isset($_SESSION['customer'])) {
-            session_unset();
+            unset($_SESSION['customer']);
             Redirect(site_url('customer'), false);
         }
     }

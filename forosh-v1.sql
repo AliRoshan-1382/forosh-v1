@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 27, 2023 at 09:11 PM
+-- Generation Time: Sep 28, 2023 at 09:02 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -78,7 +78,8 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`id`, `customer_name`, `customer_username`, `customer_password`, `access_login`) VALUES
-(13, 'ali', 'reza', '$2y$10$QtR/pnM/vhZ9DR2Vp.UjCe9mo6Uv3xC1D.mpr6v5s.e0uk06yzhxK', 'no');
+(13, 'ali', 'reza', '$2y$10$QtR/pnM/vhZ9DR2Vp.UjCe9mo6Uv3xC1D.mpr6v5s.e0uk06yzhxK', 'ok'),
+(14, 'ali', 'ali', '$2y$10$S23ir24jzk88bui9EfxEWu2xSwXewHfIGwOYXB/2Mb8JlaM0X0ngG', 'ok');
 
 -- --------------------------------------------------------
 
@@ -101,7 +102,7 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `product_name`, `product_inventory`, `product_price`, `product_category`, `sales`, `remaining`) VALUES
-(24, 'desk-1', 270, 600, 'Desk', 270, 0);
+(24, 'desk-1', 330, 600, 'Desk', 320, 10);
 
 -- --------------------------------------------------------
 
@@ -136,7 +137,9 @@ INSERT INTO `reports` (`id`, `customer_name`, `customer_id`, `product_id`, `prod
 (35, 'ahmad', 9, 24, 'desk-1', '2023-09-27 18:01:48', 'accept', 600, 40, 24000),
 (36, 'ahmad', 9, 24, 'desk-1', '2023-09-27 18:03:28', 'accept', 600, 80, 48000),
 (37, 'ahmad', 9, 24, 'desk-1', '2023-09-27 18:03:40', 'accept', 600, 10, 6000),
-(38, 'ahmad', 9, 24, 'desk-1', '2023-09-27 18:45:32', 'accept', 600, 50, 30000);
+(38, 'ahmad', 9, 24, 'desk-1', '2023-09-27 18:45:32', 'accept', 600, 50, 30000),
+(39, 'ali', 14, 24, 'desk-1', '2023-09-28 06:47:23', 'accept', 600, 50, 30000),
+(40, 'ali', 14, 24, 'desk-1', '2023-09-28 06:47:30', 'failed', 600, 60, 36000);
 
 --
 -- Indexes for dumped tables
@@ -201,7 +204,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `product`
@@ -213,7 +216,7 @@ ALTER TABLE `product`
 -- AUTO_INCREMENT for table `reports`
 --
 ALTER TABLE `reports`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- Constraints for dumped tables

@@ -27,31 +27,39 @@ class customerController
     }
 
     public function session(){
-        if (isset($_SESSION['customer']) || isset($_SESSION['customer_id'])) 
+        if (!empty($this->customerDetails())) 
         {
-            $data = $this->customerModel->get(["id", "customer_name", "customer_password", "customer_username", "access_login"], ["id" => $_SESSION['customer_id']])[0];
-
-            if ($data['customer_username'] != $_SESSION['customer'] || $data['access_login'] == 'no') 
+            if (isset($_SESSION['customer']) || isset($_SESSION['customer_id'])) 
             {
-                unset($_SESSION['customer']);
+                $data = $this->customerModel->get(["id", "customer_name", "customer_password", "customer_username", "access_login"], ["id" => $_SESSION['customer_id']])[0];
+        
+                if ($data['customer_username'] != $_SESSION['customer'] || $data['access_login'] == 'no') 
+                {
+                    unset($_SESSION['customer']);
+                    Redirect(site_url('customer'), false);
+                }  
+                
+            }else 
+            {
                 Redirect(site_url('customer'), false);
-            }  
-            
-        }else 
-        {
-            Redirect(site_url('customer'), false);
+            }
         }
+        // else 
+        // {
+        //     unset($_SESSION['customer']);
+        //     Redirect(site_url('customer'), false);
+        // }
     }
 
     public function dashboard()
     {
         if (!empty($_SESSION['customer'])) {
-            $data = $this->customerModel->get(["id", "customer_name", "customer_password", "customer_username"], ["customer_username" => $_SESSION['customer']]);
+        $data = $this->customerModel->get(["id", "customer_name", "customer_password", "customer_username"], ["customer_username" => $_SESSION['customer']]);
 
-            $product = $this->productModel->get(["id", "product_name", "product_inventory", "product_price", "product_category", "remaining"], ["remaining[>]" => 1]);
+        $product = $this->productModel->get(["id", "product_name", "product_inventory", "product_price", "product_category", "remaining"], ["remaining[>]" => 1]);
 
-            $out['customer'] = $data[0];
-            $out['products'] = $product;
+        $out['customer'] = $data[0];
+        $out['products'] = $product;
 
             view('customer.CustomerDashboard', $out);
         } else {

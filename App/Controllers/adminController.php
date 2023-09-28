@@ -616,7 +616,7 @@ class adminController{
             elseif($check_report == 0) 
             {
                 $RowCount =  $this->customerModel->delete(["id"=>$id]);
-
+                unset($_SESSION['customer']);
                 if ($RowCount == 1) {
                     $data['status'] = true;
                     $data['Data'] = "Customer Deleted Successfully";

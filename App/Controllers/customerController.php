@@ -31,15 +31,14 @@ class customerController
         {
             $data = $this->customerModel->get(["id", "customer_name", "customer_password", "customer_username", "access_login"], ["id" => $_SESSION['customer_id']])[0];
 
-            if ($data['customer_username'] != $_SESSION['customer']) {
-                session_unset();
+            if ($data['customer_username'] != $_SESSION['customer'] || $data['access_login'] == 'no') 
+            {
+                unset($_SESSION['customer']);
                 Redirect(site_url('customer'), false);
-            }
-            if ($data['access_login'] == 'no') {
-                session_unset();
-                Redirect(site_url('customer'), false);            
-            }
-        }else {
+            }  
+            
+        }else 
+        {
             Redirect(site_url('customer'), false);
         }
     }

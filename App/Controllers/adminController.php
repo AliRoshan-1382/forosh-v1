@@ -33,7 +33,7 @@ class adminController{
             $data = $this->adminModel->get(["id", "admin-name", "admin-username"], ["id" => $_SESSION['admin_id']])[0];
 
             if ($data['admin-username'] != $_SESSION['admin']) {
-                session_unset();
+                unset($_SESSION['admin']);
                 Redirect(site_url(''), false);
             }
         }else {
@@ -336,8 +336,36 @@ class adminController{
             }
             else 
             {
-                $check_duplicate_name = $this->productModel->get('*',["product_name"=>$request->input('name')])[0];
-                if ($product['product_name'] == $check_duplicate_name['product_name']) 
+                $check = $this->productModel->get('*',["product_name"=>$request->input('name')]);
+                if (!empty($check)) 
+                {
+                    $check_duplicate_name = $check[0];
+                    if ($product['product_name'] == $check_duplicate_name['product_name']) 
+                    {
+                    $userInfo = [
+                        "product_name"=>$request->input('name'),
+                        "product_inventory"=>$new_inventory,
+                        "product_price"=>$request->input('price'),
+                        "product_category"=>$request->input('category'),
+                        "remaining"=>$new_remaining,
+                    ]; 
+    
+                    $count = $this->productModel->update($userInfo, ["id"=>$request->input('id')]);
+    
+                    if ($count == 1) {         
+                        $data['status'] = true;
+                        $data['Data'] = "Product Updated Successfully ...";
+                        $data['url'] = "admin/productsTable";
+                    }
+                    }
+                    else 
+                    {
+                        $data['status'] = false;
+                        $data['Data'] = "Product With This Name Already Exist...";
+                        $data['url'] = "admin/productsTable";
+                    }
+                }
+                else 
                 {
                     $userInfo = [
                         "product_name"=>$request->input('name'),
@@ -354,12 +382,6 @@ class adminController{
                         $data['Data'] = "Product Updated Successfully ...";
                         $data['url'] = "admin/productsTable";
                     }
-                }
-                else 
-                {
-                    $data['status'] = false;
-                    $data['Data'] = "Product With This Name Already Exist...";
-                    $data['url'] = "admin/productsTable";
                 }
             }
         }
@@ -647,6 +669,10 @@ class adminController{
 
         if ($Count == 1) {
 
+            if ($request->input('login') == 'no') {
+                unset($_SESSION['customer']);
+            }
+
             $input_customer_username = $request->input('Username');
             $input_customer_id = $request->input('id');
 
@@ -654,6 +680,7 @@ class adminController{
 
             if ($input_customer_username == $customer['customer_username']) {
 
+                
                 $userInfo = 
                 [
                     "access_login"=>$request->input('login'),

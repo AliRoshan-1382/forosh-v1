@@ -54,7 +54,7 @@ class customerController
         }
         else 
         {
-            if ($data['access_login'] == 'no') {
+            if ($data[0]['access_login'] == 'no') {
                 unset($_SESSION['customer']);
                 Redirect(site_url('customer'), false);
             }   
@@ -124,7 +124,7 @@ class customerController
     }
 
     public function customerDetails(){
-        return $this->customerModel->get(["id", "customer_name", "customer_password", "customer_username"], ["customer_username" => $_SESSION['customer']]);
+        return $this->customerModel->get(["id", "customer_name", "customer_password", "customer_username", "access_login"], ["customer_username" => $_SESSION['customer']]);
     }
 
     public function OrderForm(){

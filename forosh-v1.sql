@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 28, 2023 at 10:39 AM
+-- Generation Time: Nov 07, 2023 at 09:45 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -74,6 +74,13 @@ CREATE TABLE `customer` (
   `access_login` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
+--
+-- Dumping data for table `customer`
+--
+
+INSERT INTO `customer` (`id`, `customer_name`, `customer_username`, `customer_password`, `access_login`) VALUES
+(16, 'ali', 'ali', '$2y$10$V7El5bzHPgNWUBRz1P.MVek4Sxs5JJoOTBJZnIEy8KIGMgZLT0uZ6', 'ok');
+
 -- --------------------------------------------------------
 
 --
@@ -96,7 +103,8 @@ CREATE TABLE `product` (
 
 INSERT INTO `product` (`id`, `product_name`, `product_inventory`, `product_price`, `product_category`, `sales`, `remaining`) VALUES
 (24, 'desk-1', 385, 600, 'Desk', 385, 0),
-(25, 'chair', 160, 700, 'Chair', 160, 0);
+(25, 'chair', 160, 700, 'Chair', 160, 0),
+(26, 'black chair', 800, 500, 'Desk', 800, 0);
 
 -- --------------------------------------------------------
 
@@ -138,7 +146,8 @@ INSERT INTO `reports` (`id`, `customer_name`, `customer_id`, `product_id`, `prod
 (43, 'ali', 14, 24, 'desk-1', '2023-09-28 07:21:14', 'accept', 600, 46, 27600),
 (44, 'ali', 14, 25, 'chair', '2023-09-28 07:21:18', 'accept', 700, 150, 105000),
 (51, 'ali', 14, 24, 'desk-1', '2023-09-28 07:23:34', 'accept', 600, 4, 2400),
-(52, 'ali', 14, 25, 'chair', '2023-09-28 07:23:37', 'accept', 700, 10, 7000);
+(52, 'ali', 14, 25, 'chair', '2023-09-28 07:23:37', 'accept', 700, 10, 7000),
+(53, 'ali', 16, 26, 'black chair', '2023-11-07 08:45:06', 'accept', 500, 800, 400000);
 
 --
 -- Indexes for dumped tables
@@ -203,19 +212,19 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `reports`
 --
 ALTER TABLE `reports`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- Constraints for dumped tables
